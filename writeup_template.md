@@ -36,21 +36,19 @@ The goals / steps of this project are the following:
 
 ####1. Provide a Writeup / README that includes all the rubric points and how you addressed each one. You can submit your writeup as markdown or pdf. You can use this template as a guide for writing the report. The submission includes the project code.
 
-You're reading it! and here is a link to my [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+You're reading it! and here is a link to my [project code](https://github.com/pabloelizalde/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
 
 ###Data Set Summary & Exploration
 
 ####1. Provide a basic summary of the data set and identify where in your code the summary was done. In the code, the analysis should be done using python, numpy and/or pandas methods rather than hardcoding results manually.
 
-The code for this step is contained in the second code cell of the IPython notebook.  
+In the first cell I load all the data, that was previously downloaded. In the second cell, a basic summary is provided:  
 
-I used the pandas library to calculate summary statistics of the traffic
-signs data set:
-
-* The size of training set is ?
-* The size of test set is ?
-* The shape of a traffic sign image is ?
-* The number of unique classes/labels in the data set is ?
+* The size of training set is 34799
+* The size of test set is 12630
+* The size of the validation set is 4410
+* The shape of a traffic sign image is (32,32,3)
+* The number of unique classes/labels in the data set is 43
 
 ####2. Include an exploratory visualization of the dataset and identify where the code is in your code file.
 
@@ -64,48 +62,46 @@ Here is an exploratory visualization of the data set. It is a bar chart showing 
 
 ####1. Describe how, and identify where in your code, you preprocessed the image data. What tecniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc.
 
-The code for this step is contained in the fourth code cell of the IPython notebook.
+During my test I used several ways of preprocessing the images. Having diverse results. From the cells 5 to the 8, you can see the tecniques I used. These changes are applying a Gaussian blur, rotating the image, grayscale together with sharpening tecnique and using normalization. 
+In the cell number 9, I apply the changes to my data set. In my final result I just used the grayscale together with the sharpening of the image, since is what gave me better results.
 
-As a first step, I decided to convert the images to grayscale because ...
 
-Here is an example of a traffic sign image before and after grayscaling.
+![before](./examples/before.png)
+![after](./examples/after.png)
 
-![alt text][image2]
-
-As a last step, I normalized the image data because ...
 
 ####2. Describe how, and identify where in your code, you set up training, validation and testing data. How much data was in each set? Explain what techniques were used to split the data into these sets. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, identify where in your code, and provide example images of the additional data)
 
-The code for splitting the data into training and validation sets is contained in the fifth code cell of the IPython notebook.  
-
-To cross validate my model, I randomly split the training data into a training set and validation set. I did this by ...
-
-My final training set had X number of images. My validation set and test set had Y and Z number of images.
-
-The sixth code cell of the IPython notebook contains the code for augmenting the data set. I decided to generate additional data because ... To add more data to the the data set, I used the following techniques because ... 
-
-Here is an example of an original image and an augmented image:
-
-![alt text][image3]
-
-The difference between the original data set and the augmented data set is the following ... 
+The data downloaded was already divided in training, validation and testing. So I didn’t apply any tecnique to split the data. 
+Neither I created additional data. But I was exploring possibilities for future improvements. My way to go would be apply a small rotation to the a subset of images to generate new data, and increase my testing data.
 
 
 ####3. Describe, and identify where in your code, what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
-The code for my final model is located in the seventh cell of the ipython notebook. 
+The code for my final model is located in the cell number 13. I started from the LeNet model. With that model I obtained a 0.82 in the validation data. After several try and error, I got the best result if I included some more convolutional layers at the beginning, making the output deeper, and adding more fully connected layers at the end. Dropout didn’t make any significant change to my model, so I did not use it. 
 
 My final model consisted of the following layers:
 
 | Layer         		|     Description	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Input         		| 32x32x3 RGB image   							| 
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
+| Input         		| 32x32x1 RGB image   							| 
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 28x28x6 	|
 | RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
+| BATCH NORMALIZATION					|												|
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 24x24x12 	|
+| RELU					|												|
+| Convolution 5x5     	| 1x1 stride, valid padding, outputs 20x20x24 	|
+| Max pooling	      	| 2x2 stride,  outputs 10x10x24 				|
+| Convolution 3x3     	| 1x1 stride, valid padding, outputs 8x8x32 	|
+| RELU					|												|
+| FLATTEN					|					outputs 2048							|
+| Fully connected		|         outputs 512									|
+| RELU					|												|
+| Fully connected		|         outputs 256									|
+| RELU					|												|
+| Fully connected		|         outputs 84									|
+| RELU					|												|
+| Fully connected		|         outputs 43									|
 |						|												|
 |						|												|
  
@@ -113,18 +109,20 @@ My final model consisted of the following layers:
 
 ####4. Describe how, and identify where in your code, you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-The code for training the model is located in the eigth cell of the ipython notebook. 
-
-To train the model, I used an ....
+The hyperparameter used for this model are located in cell number 12 (epochs and batch_size) and in the cell number 15 (learning rate and optimizer). The values are as follow:
+EPOCHS = 100
+BATCH_SIZE = 128
+LEARNING_RATE = 0.0001
+OPTIMIZER = Adam Optimizer
 
 ####5. Describe the approach taken for finding a solution. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 The code for calculating the accuracy of the model is located in the ninth cell of the Ipython notebook.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+* training set accuracy of 1.0
+* validation set accuracy of 0.933
+* test set accuracy of 0.917
 
 If an iterative approach was chosen:
 * What was the first architecture that was tried and why was it chosen?
