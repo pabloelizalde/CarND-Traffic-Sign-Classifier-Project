@@ -183,7 +183,7 @@ Here are the results of the prediction:
 | 60 km/h	      		| Right of way next intersec					 				|
 | Keer right			| Speed limit 50km/h      							|
 
-
+Also in this cell, is display the accuracy on the new models. That is of 0%. This result surprise me since the accuracy in the different data sets was over 90%.
 The model was unable to correctly classify any of the 5 traffic signs. This comparing with the accuracy of the model in the traning/valid/test sets is completely different. 
 
 ####3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
